@@ -10,12 +10,12 @@ public class DistanceCalc : MonoBehaviour {
 
 	private StateManager sm;
 
-	public GameObject sphereAB;
-	public GameObject sphereBA;
-	public GameObject sphereAC;
-	public GameObject sphereCA;
-	public GameObject sphereCD;
-	public GameObject sphereDC;
+	public GameObject wSphereAB;
+	public GameObject wSphereBA;
+	public GameObject wSphereAC;
+	public GameObject wSphereCA;
+	public GameObject wSphereCD;
+	public GameObject wSphereDC;
 
 	public GameObject ySphereAB;
 	public GameObject ySphereBA;
@@ -137,9 +137,9 @@ public class DistanceCalc : MonoBehaviour {
 
 	private void solveWhiteLayer(){
 
-		float distanceAB = Vector3.Distance (sphereAB.transform.position, sphereBA.transform.position);
-		float distanceAC = Vector3.Distance (sphereAC.transform.position, sphereCA.transform.position);
-		float distanceCD = Vector3.Distance (sphereCD.transform.position, sphereDC.transform.position);
+		float distanceAB = Vector3.Distance (wSphereAB.transform.position, wSphereBA.transform.position);
+		float distanceAC = Vector3.Distance (wSphereAC.transform.position, wSphereCA.transform.position);
+		float distanceCD = Vector3.Distance (wSphereCD.transform.position, wSphereDC.transform.position);
 
 		//Instructions
 		if (foundA && findA) {
@@ -210,14 +210,6 @@ public class DistanceCalc : MonoBehaviour {
 
 	private void resetGameObjectPositions(){
 
-		Debug.Log (sphereAB.transform.position);
-		Debug.Log (sphereBA.transform.position);
-		Debug.Log (sphereAC.transform.position);
-		Debug.Log (sphereCA.transform.position);
-		Debug.Log (sphereCD.transform.position);
-		Debug.Log (sphereDC.transform.position);
-
-
 //		sphereAB.transform.position = new Vector3(1.9f, 0.0f, 2.5f);
 //		sphereBA.transform.position = new Vector3(3.1f, 0.0f, 2.5f);
 //		sphereAC.transform.position = new Vector3(1.5f, 0.0f, 2.1f);
@@ -225,8 +217,5 @@ public class DistanceCalc : MonoBehaviour {
 //		sphereCD.transform.position = new Vector3(1.9f, 0.0f, 0.5f);
 //		sphereDC.transform.position = new Vector3(3.1f, 0.0f, 0.5f);
 	
-
-		Debug.Log (sphereAB.transform.position);
-		Debug.Log (sphereBA.transform.position);
 	}
 }
