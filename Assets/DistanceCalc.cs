@@ -8,6 +8,8 @@ public class DistanceCalc : MonoBehaviour {
 	public UnityEngine.UI.Text instructions;
 	public UnityEngine.UI.Button reset;
 
+	private StateManager sm;
+
 	public GameObject sphereAB;
 	public GameObject sphereBA;
 	public GameObject sphereAC;
@@ -15,9 +17,17 @@ public class DistanceCalc : MonoBehaviour {
 	public GameObject sphereCD;
 	public GameObject sphereDC;
 
-	private StateManager sm;
+	public GameObject ySphereAB;
+	public GameObject ySphereBA;
+	public GameObject ySphereAC;
+	public GameObject ySphereCA;
+	public GameObject ySphereCD;
+	public GameObject ySphereDC;
 
-	double distanceThreshold = 0.8;
+	private Vector3 originalPositionAB;
+	private Vector3 originalPositionBA;
+
+	double distanceThreshold = 0.6;
 
 	private bool foundA;
 	private bool foundB;
@@ -37,7 +47,10 @@ public class DistanceCalc : MonoBehaviour {
 	private bool matchAC;
 	private bool matchCD;
 
+	private bool foundYA;
+
 	private bool whiteLayerCompleted;
+	private bool yellowLayerCompleted;
 
 	// Use this for initialization
 	void Start () {
@@ -48,6 +61,7 @@ public class DistanceCalc : MonoBehaviour {
 		instructions.text = "Find A";
 
 		//Init varibales
+		//White
 		foundA = false;
 		foundB = false;
 		foundC = false;
@@ -66,12 +80,14 @@ public class DistanceCalc : MonoBehaviour {
 		matchAC = false;
 		matchCD = false;
 
+		//Yellow
+		foundYA = false;
 
 		whiteLayerCompleted = false;
+		yellowLayerCompleted = false;
 
+		//resetGameObjectPositions ();
 
-//		Vector3 originalPosition0 = sphere0.transform.position;
-//		Vector3 originalPosition1 = sphere1.transform.position;
 //		float originalDistance = Vector3.Distance (sphere0.transform.position, sphere1.transform.position);
 //		Debug.Log (originalPosition0);
 //		Debug.Log (originalPosition1);
@@ -80,10 +96,7 @@ public class DistanceCalc : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float distanceAB = Vector3.Distance (sphereAB.transform.position, sphereBA.transform.position);
-		float distanceAC = Vector3.Distance (sphereAC.transform.position, sphereCA.transform.position);
-		float distanceCD = Vector3.Distance (sphereCD.transform.position, sphereDC.transform.position);
-
+		
 		// Query the StateManager to retrieve the list of
 		// currently 'active' trackables 
 		//(i.e. the ones currently being tracked by Vuforia)
@@ -92,7 +105,7 @@ public class DistanceCalc : MonoBehaviour {
 		// Iterate through the list of active trackables
 		//Debug.Log ("List of trackables currently active (tracked): ");
 		foreach (TrackableBehaviour tb in activeTrackables) {
-			Debug.Log("Trackable: " + tb.TrackableName);
+			//Debug.Log("Trackable: " + tb.TrackableName);
 			if(string.Equals(tb.TrackableName,"FrameMarker0")){
 				foundA = true;
 			}
@@ -105,7 +118,28 @@ public class DistanceCalc : MonoBehaviour {
 			if(matchedAC && string.Equals(tb.TrackableName,"FrameMarker3")){
 				foundD = true;
 			}
+			if(matchedCD && string.Equals(tb.TrackableName,"FrameMarker4")){
+				foundYA = true;
+			}
 		}
+
+		if (!whiteLayerCompleted) {
+			solveWhiteLayer ();
+		} else if (!yellowLayerCompleted) {
+			solveYellowLayer ();
+		} else {
+			//Winning mode!
+			instructions.text = "Winning!";
+		}
+
+
+	}
+
+	private void solveWhiteLayer(){
+
+		float distanceAB = Vector3.Distance (sphereAB.transform.position, sphereBA.transform.position);
+		float distanceAC = Vector3.Distance (sphereAC.transform.position, sphereCA.transform.position);
+		float distanceCD = Vector3.Distance (sphereCD.transform.position, sphereDC.transform.position);
 
 		//Instructions
 		if (foundA && findA) {
@@ -131,7 +165,7 @@ public class DistanceCalc : MonoBehaviour {
 			findD = false;
 			matchCD = true;
 		}
-	
+
 		// Dinstace 
 		if (matchAB && distanceThreshold > distanceAB) {
 			instructions.text = "Find C";
@@ -146,17 +180,53 @@ public class DistanceCalc : MonoBehaviour {
 			findD = true;
 		}
 		if (matchCD && distanceThreshold > distanceCD) {
-			instructions.text = "DONE!";
+			instructions.text = "White layer completed!";
 			matchedCD = true;
 			matchCD = false;
 			whiteLayerCompleted = true;
 		}
+		//Debug.Log (distanceAB);
+	}
 
+	private void solveYellowLayer(){
+		float distanceAB = Vector3.Distance (ySphereAB.transform.position, ySphereBA.transform.position);
+		float distanceAC = Vector3.Distance (ySphereAC.transform.position, ySphereCA.transform.position);
+		float distanceCD = Vector3.Distance (ySphereCD.transform.position, ySphereDC.transform.position);
+
+		Debug.Log (distanceAB);
+		Debug.Log (distanceAC);
+		Debug.Log (distanceCD);
+		// Dinstace 
+		if (distanceThreshold > distanceAB && distanceThreshold > distanceAC && distanceThreshold > distanceCD) {
+			yellowLayerCompleted = true;
+		}
 	}
 
 	public void RestartGame ()
 	{
 		Debug.Log ("Reset");
 		Start();
+	}
+
+	private void resetGameObjectPositions(){
+
+		Debug.Log (sphereAB.transform.position);
+		Debug.Log (sphereBA.transform.position);
+		Debug.Log (sphereAC.transform.position);
+		Debug.Log (sphereCA.transform.position);
+		Debug.Log (sphereCD.transform.position);
+		Debug.Log (sphereDC.transform.position);
+
+
+//		sphereAB.transform.position = new Vector3(1.9f, 0.0f, 2.5f);
+//		sphereBA.transform.position = new Vector3(3.1f, 0.0f, 2.5f);
+//		sphereAC.transform.position = new Vector3(1.5f, 0.0f, 2.1f);
+//		sphereCA.transform.position = new Vector3(1.5f, 0.0f, 0.9f);
+//		sphereCD.transform.position = new Vector3(1.9f, 0.0f, 0.5f);
+//		sphereDC.transform.position = new Vector3(3.1f, 0.0f, 0.5f);
+	
+
+		Debug.Log (sphereAB.transform.position);
+		Debug.Log (sphereBA.transform.position);
 	}
 }
