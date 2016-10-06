@@ -7,6 +7,9 @@ using System.Collections.Generic;
 public class DistanceCalc : MonoBehaviour {
 	public UnityEngine.UI.Text instructions;
 	public UnityEngine.UI.Button reset;
+	public UnityEngine.UI.Button TopLayerButton;
+	public UnityEngine.UI.Button BottomLayerButton;
+	public UnityEngine.UI.Button UnderLayerButton;
 	public UnityEngine.UI.Button YCase1Button;
 	public UnityEngine.UI.Button YCase2Button;
 
@@ -35,6 +38,10 @@ public class DistanceCalc : MonoBehaviour {
 	private bool foundB;
 	private bool foundC;
 	private bool foundD;
+
+	private bool WPlacementTop;
+	private bool WPlacementBottom;
+	private bool WPlacementUnder;
 
 	private bool matchedAB;
 	private bool matchedAC;
@@ -83,6 +90,10 @@ public class DistanceCalc : MonoBehaviour {
 		foundC = false;
 		foundD = false;
 
+		WPlacementTop = false;
+		WPlacementBottom = false;
+		WPlacementUnder = false;
+
 		matchedAB = false;
 		matchedAC = false;
 		matchedCD = false;
@@ -112,8 +123,8 @@ public class DistanceCalc : MonoBehaviour {
 		yCase6 = false;
 		yCase7 = false;
 
-		YCase1Button.gameObject.SetActive(false);
-		YCase2Button.gameObject.SetActive(false);
+		hideWPlacementButtons ();
+		hideYCaseButtons ();
 
 		whiteLayerCompleted = false; 	// Step 1
 		step2Completed = false;  		// Step 2
@@ -195,18 +206,21 @@ public class DistanceCalc : MonoBehaviour {
 			instructions.text = "Match A & B";
 			findB = false;
 			matchAB = true;
+			showWPlacementButtons ();
 		}
 
 		if (foundC && findC) {
 			instructions.text = "Match A & C";
 			findC = false;
 			matchAC = true;
+			showWPlacementButtons ();
 		}
 
 		if (foundD && findD) {
 			instructions.text = "Match C & D";
 			findD = false;
 			matchCD = true;
+			showWPlacementButtons ();
 		}
 
 		// Dinstace 
@@ -215,12 +229,14 @@ public class DistanceCalc : MonoBehaviour {
 			matchedAB = true;
 			matchAB = false;
 			findC = true;
+			hideWPlacementButtons ();
 		}
 		if (matchAC && distanceThreshold > distanceAC) {
 			instructions.text = "Find D";
 			matchedAC = true;
 			matchAC = false;
 			findD = true;
+			hideWPlacementButtons ();
 		}
 		if (matchCD && distanceThreshold > distanceCD) {
 			instructions.text = "White layer completed!";
@@ -228,7 +244,8 @@ public class DistanceCalc : MonoBehaviour {
 			matchCD = false;
 			whiteLayerCompleted = true;
 			findYA = true;
-			enableYCaseButtons ();
+			showYCaseButtons ();
+			hideWPlacementButtons ();
 		}
 		//Debug.Log (distanceAB);
 	}
@@ -283,6 +300,19 @@ public class DistanceCalc : MonoBehaviour {
 		Debug.Log ("Reset");
 		Start();
 	}
+
+	public void SelectWPlacement (int selectedPlacement) {
+		if (selectedPlacement == 1) {
+			WPlacementTop = true;
+		}
+		if (selectedPlacement == 2) {
+			WPlacementBottom = true;
+		}
+		if (selectedPlacement == 3) {
+			WPlacementUnder = true;
+		}
+		//disableYCaseButtons ();
+	}
 		
 	public void SelectYCase (int selectedCase) {
 		if (selectedCase == 1) {
@@ -291,15 +321,27 @@ public class DistanceCalc : MonoBehaviour {
 		if (selectedCase == 2) {
 			yCase2 = true;
 		}
-		disableYCaseButtons ();
+		hideYCaseButtons ();
 	}
 
-	private void enableYCaseButtons(){
+	private void showWPlacementButtons(){
+		TopLayerButton.gameObject.SetActive(true);
+		BottomLayerButton.gameObject.SetActive(true);
+		UnderLayerButton.gameObject.SetActive(true);
+	}
+
+	private void hideWPlacementButtons(){
+		TopLayerButton.gameObject.SetActive(false);
+		BottomLayerButton.gameObject.SetActive(false);
+		UnderLayerButton.gameObject.SetActive(false);
+	}
+
+	private void showYCaseButtons(){
 		YCase1Button.gameObject.SetActive(true);
 		YCase2Button.gameObject.SetActive(true);
 	}
 
-	private void disableYCaseButtons(){
+	private void hideYCaseButtons(){
 		YCase1Button.gameObject.SetActive(false);
 		YCase2Button.gameObject.SetActive(false);
 	}
