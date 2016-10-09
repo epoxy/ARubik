@@ -10,8 +10,18 @@ using System.Collections.Generic;
 
 public class GazebuttonTrigger : MonoBehaviour
 {
+    public enum TriggerType
+    {
+        TOP_TRIGGER,
+        BOTTOM_TRIGGER,
+        UNDER_TRIGGER,
+        RESET_TRIGGER,
+        CASE1_TRIGGER,
+        CASE2_TRIGGER
+    }
 
     #region PUBLIC_MEMBER_VARIABLES
+    public TriggerType triggerType = TriggerType.TOP_TRIGGER;
     public float activationTime = 1.5f;
     public Material focusedMaterial;
     public Material nonFocusedMaterial;
@@ -21,6 +31,7 @@ public class GazebuttonTrigger : MonoBehaviour
 
     #region PRIVATE_MEMBER_VARIABLES
     private float mFocusedTime = 0;
+    DistanceCalc distCalc = new DistanceCalc();
     #endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -50,9 +61,32 @@ public class GazebuttonTrigger : MonoBehaviour
             if ((mFocusedTime > activationTime) || startAction)
             {
                 mFocusedTime = 0;
-
-                //Do the call to DistanceCalc
-
+                
+                switch (triggerType)
+                {
+                    //TODO: Do the calls to DistanceCalc
+                    case TriggerType.TOP_TRIGGER:
+                        Debug.Log("TOP TRIGGER");
+                        break;
+                    case TriggerType.BOTTOM_TRIGGER:
+                        Debug.Log("BOTTOM TRIGGER");
+                        break;
+                    case TriggerType.UNDER_TRIGGER:
+                        Debug.Log("UNDER TRIGGER");
+                        break;
+                    case TriggerType.RESET_TRIGGER:
+                        Debug.Log("RESET TRIGGER");
+                        //distCalc.RestartGame();
+                        break;
+                    case TriggerType.CASE1_TRIGGER:
+                        Debug.Log("CASE1 TRIGGER");
+                        break;
+                    case TriggerType.CASE2_TRIGGER:
+                        Debug.Log("CASE2 TRIGGER");
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         else

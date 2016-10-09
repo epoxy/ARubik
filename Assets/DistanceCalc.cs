@@ -6,7 +6,14 @@ using System.Collections.Generic;
 
 public class DistanceCalc : MonoBehaviour {
 	public UnityEngine.UI.Text instructions;
-	public UnityEngine.UI.Button reset;
+    public GameObject ResetGazebutton;
+    public GameObject TopLayerGazebutton;
+    public GameObject BottomLayerGazebutton;
+    public GameObject UnderLayerGazebutton;
+    public GameObject YCase1Gazebutton;
+    public GameObject YCase2Gazebutton;
+
+    public UnityEngine.UI.Button reset;
 	public UnityEngine.UI.Button TopLayerButton;
 	public UnityEngine.UI.Button BottomLayerButton;
 	public UnityEngine.UI.Button UnderLayerButton;
@@ -297,7 +304,9 @@ public class DistanceCalc : MonoBehaviour {
 	}
 
 	public void RestartGame () {
-		Debug.Log ("Reset");
+        instructions.text = "GAME RESTARTED";
+
+        Debug.Log ("Reset");
 		Start();
 	}
 
@@ -325,24 +334,47 @@ public class DistanceCalc : MonoBehaviour {
 	}
 
 	private void showWPlacementButtons(){
-		TopLayerButton.gameObject.SetActive(true);
+        //TODO Hide buttons that are not needed
+        //Gaze buttons
+        TopLayerGazebutton.gameObject.SetActive(true);
+        BottomLayerGazebutton.gameObject.SetActive(true);
+        UnderLayerGazebutton.gameObject.SetActive(true);
+
+        //Old buttons
+        TopLayerButton.gameObject.SetActive(true);
 		BottomLayerButton.gameObject.SetActive(true);
 		UnderLayerButton.gameObject.SetActive(true);
-	}
+    }
 
 	private void hideWPlacementButtons(){
-		TopLayerButton.gameObject.SetActive(false);
+        //Gaze buttons
+        TopLayerGazebutton.gameObject.SetActive(false);
+        BottomLayerGazebutton.gameObject.SetActive(false);
+        UnderLayerGazebutton.gameObject.SetActive(false);
+
+        //Old buttons
+        TopLayerButton.gameObject.SetActive(false);
 		BottomLayerButton.gameObject.SetActive(false);
 		UnderLayerButton.gameObject.SetActive(false);
 	}
 
 	private void showYCaseButtons(){
-		YCase1Button.gameObject.SetActive(true);
-		YCase2Button.gameObject.SetActive(true);
-	}
+        //Gaze buttons
+        YCase1Gazebutton.gameObject.SetActive(true);
+        YCase2Gazebutton.gameObject.SetActive(true);
+
+        //Old buttons
+        YCase1Button.gameObject.SetActive(true);
+        YCase2Button.gameObject.SetActive(true);
+    }
 
 	private void hideYCaseButtons(){
-		YCase1Button.gameObject.SetActive(false);
-		YCase2Button.gameObject.SetActive(false);
-	}
+        //Gaze buttons
+        YCase1Gazebutton.gameObject.SetActive(false);
+        YCase2Gazebutton.gameObject.SetActive(false);
+
+        //Old buttons
+        YCase1Button.gameObject.SetActive(false);
+        YCase2Button.gameObject.SetActive(false);
+    }
 }
