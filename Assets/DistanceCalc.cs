@@ -5,20 +5,14 @@ using Vuforia;
 using System.Collections.Generic;
 
 public class DistanceCalc : MonoBehaviour {
-	public UnityEngine.UI.Text instructions;
-    public GameObject ResetGazebutton;
+	public UnityEngine.UI.Text instructionsLabel;
+    
+	public GameObject ResetGazebutton;
     public GameObject TopLayerGazebutton;
     public GameObject BottomLayerGazebutton;
     public GameObject UnderLayerGazebutton;
     public GameObject YCase1Gazebutton;
     public GameObject YCase2Gazebutton;
-
-    public UnityEngine.UI.Button reset;
-	public UnityEngine.UI.Button TopLayerButton;
-	public UnityEngine.UI.Button BottomLayerButton;
-	public UnityEngine.UI.Button UnderLayerButton;
-	public UnityEngine.UI.Button YCase1Button;
-	public UnityEngine.UI.Button YCase2Button;
 
 	private StateManager sm;
 
@@ -41,46 +35,15 @@ public class DistanceCalc : MonoBehaviour {
 
 	double distanceThreshold = 0.6;
 
-	private bool foundA;
-	private bool foundB;
-	private bool foundC;
-	private bool foundD;
-
 	private bool WPlacementTop;
 	private bool WPlacementBottom;
 	private bool WPlacementUnder;
 
-	private bool matchedAB;
-	private bool matchedAC;
-	private bool matchedCD;
 
-	private bool findA;
-	private bool findB;
-	private bool findC;
-	private bool findD;
 
-	private bool matchAB;
-	private bool matchAC;
-	private bool matchCD;
-
-	private bool foundYA;
-	private bool foundYB;
-	private bool foundYC;
-	private bool foundYD;
-
-	private bool findYA;
-
-	private bool yCase1;
-	private bool yCase2;
-	private bool yCase3;
-	private bool yCase4;
-	private bool yCase5;
-	private bool yCase6;
-	private bool yCase7;
-
-	private bool whiteLayerCompleted;
-	private bool step2Completed;
-	private bool yellowLayerCompleted;
+	private GameModel game;
+	private CubeModel cube;
+	private InstructionsModel instructions;
 
 	// Use this for initialization
 	void Start () {
@@ -88,54 +51,45 @@ public class DistanceCalc : MonoBehaviour {
 		 sm = TrackerManager.Instance.GetStateManager ();
 
 		//Init text
-		instructions.text = "Find A";
+		instructionsLabel.text = "Find A";
 
-		//Init varibales
-		//White
-		foundA = false;
-		foundB = false;
-		foundC = false;
-		foundD = false;
+		// Init model
+		game = new GameModel();
+		cube = new CubeModel ();
+		instructions = new InstructionsModel ();
 
+		//Init varibales for White
+		cube.foundA = false;
+		cube.foundB = false;
+		cube.foundC = false;
+		cube.foundD = false;
+
+		cube.matchedAB = false;
+		cube.matchedAC = false;
+		cube.matchedCD = false;
+
+		instructions.findA = true;
+		instructions.findB = false;
+		instructions.findC = false;
+		instructions.findD = false;
+
+		instructions.matchAB = false;
+		instructions.matchAC = false;
+		instructions.matchCD = false;
+
+	
+		// Init buttons 
 		WPlacementTop = false;
 		WPlacementBottom = false;
 		WPlacementUnder = false;
-
-		matchedAB = false;
-		matchedAC = false;
-		matchedCD = false;
-
-		findA = true;
-		findB = false;
-		findC = false;
-		findD = false;
-
-		matchAB = false;
-		matchAC = false;
-		matchCD = false;
-
-		//Yellow
-		foundYA = false;
-		foundYB = false;
-		foundYC = false;
-		foundYD = false;
-
-		findYA = false;
-
-		yCase1 = false;
-		yCase2 = false;
-		yCase3 = false;
-		yCase4 = false;
-		yCase5 = false;
-		yCase6 = false;
-		yCase7 = false;
+	
 
 		hideWPlacementButtons ();
 		hideYCaseButtons ();
 
-		whiteLayerCompleted = false; 	// Step 1
-		step2Completed = false;  		// Step 2
-		yellowLayerCompleted = false;	// Step 3
+		game.whiteLayerCompleted = false; 	// Step 1
+		game.step2Completed = false;  		// Step 2
+		game.yellowLayerCompleted = false;	// Step 3
 	}
 	
 	// Update is called once per frame
@@ -144,12 +98,12 @@ public class DistanceCalc : MonoBehaviour {
 		iterateTrackables ();
 
 		// Step #
-		if (!whiteLayerCompleted) { // Step 1
+		if (!game.whiteLayerCompleted) { // Step 1
 			solveWhiteLayer ();
-		} else if (!yellowLayerCompleted) { // Step 2 & 3
+		} else if (!game.yellowLayerCompleted) { // Step 2 & 3
 			solveYellowLayer ();
 		} else {
-			instructions.text = "Winning!";
+			instructionsLabel.text = "Winning!";
 		}
 	}
 
@@ -163,22 +117,22 @@ public class DistanceCalc : MonoBehaviour {
 		foreach (TrackableBehaviour tb in activeTrackables) {
 			//Debug.Log("Trackable: " + tb.TrackableName);
 
-			if (!whiteLayerCompleted) {
+			if (!game.whiteLayerCompleted) {
 				if(string.Equals(tb.TrackableName,"FrameMarker0")){
-					foundA = true;
+					cube.foundA = true;
 				}
-				if(foundA && string.Equals(tb.TrackableName,"FrameMarker1")){
-					foundB = true;
+				if(cube.foundA && string.Equals(tb.TrackableName,"FrameMarker1")){
+					cube.foundB = true;
 				}
-				if(matchedAB && string.Equals(tb.TrackableName,"FrameMarker2")){
-					foundC = true;
+				if(cube.matchedAB && string.Equals(tb.TrackableName,"FrameMarker2")){
+					cube.foundC = true;
 				}
-				if(matchedAC && string.Equals(tb.TrackableName,"FrameMarker3")){
-					foundD = true;
+				if(cube.matchedAC && string.Equals(tb.TrackableName,"FrameMarker3")){
+					cube.foundD = true;
 				}
 			}
 
-			if (whiteLayerCompleted) {
+			if (game.whiteLayerCompleted) {
 //				if(string.Equals(tb.TrackableName,"FrameMarker4")){
 //					YCase1 = true;
 //				}
@@ -203,54 +157,54 @@ public class DistanceCalc : MonoBehaviour {
 		float distanceCD = Vector3.Distance (wSphereCD.transform.position, wSphereDC.transform.position);
 
 		//Instructions
-		if (foundA && findA) {
-			instructions.text = "Find B";
-			findA = false;
-			findB = true;
+		if (cube.foundA && instructions.findA) {
+			instructionsLabel.text = "Find B";
+			instructions.findA = false;
+			instructions.findB = true;
 		}
 
-		if (foundB && findB) {
-			instructions.text = "Match A & B";
-			findB = false;
-			matchAB = true;
+		if (cube.foundB && instructions.findB) {
+			instructionsLabel.text = "Match A & B";
+			instructions.findB = false;
+			instructions.matchAB = true;
 			showWPlacementButtons ();
 		}
 
-		if (foundC && findC) {
-			instructions.text = "Match A & C";
-			findC = false;
-			matchAC = true;
+		if (cube.foundC && instructions.findC) {
+			instructionsLabel.text = "Match A & C";
+			instructions.findC = false;
+			instructions.matchAC = true;
 			showWPlacementButtons ();
 		}
 
-		if (foundD && findD) {
-			instructions.text = "Match C & D";
-			findD = false;
-			matchCD = true;
+		if (cube.foundD && instructions.findD) {
+			instructionsLabel.text = "Match C & D";
+			instructions.findD = false;
+			instructions.matchCD = true;
 			showWPlacementButtons ();
 		}
 
 		// Dinstace 
-		if (matchAB && distanceThreshold > distanceAB) {
-			instructions.text = "Find C";
-			matchedAB = true;
-			matchAB = false;
-			findC = true;
+		if (instructions.matchAB && distanceThreshold > distanceAB) {
+			instructionsLabel.text = "Find C";
+			cube.matchedAB = true;
+			instructions.matchAB = false;
+			instructions.findC = true;
 			hideWPlacementButtons ();
 		}
-		if (matchAC && distanceThreshold > distanceAC) {
-			instructions.text = "Find D";
-			matchedAC = true;
-			matchAC = false;
-			findD = true;
+		if (instructions.matchAC && distanceThreshold > distanceAC) {
+			instructionsLabel.text = "Find D";
+			cube.matchedAC = true;
+			instructions.matchAC = false;
+			instructions.findD = true;
 			hideWPlacementButtons ();
 		}
-		if (matchCD && distanceThreshold > distanceCD) {
-			instructions.text = "White layer completed!";
-			matchedCD = true;
-			matchCD = false;
-			whiteLayerCompleted = true;
-			findYA = true;
+		if (instructions.matchCD && distanceThreshold > distanceCD) {
+			instructionsLabel.text = "White layer completed!";
+			cube.matchedCD = true;
+			instructions.matchCD = false;
+			game.whiteLayerCompleted = true;
+			instructions.findYA = true;
 			showYCaseButtons ();
 			hideWPlacementButtons ();
 		}
@@ -258,7 +212,6 @@ public class DistanceCalc : MonoBehaviour {
 	}
 
 	private void solveYellowLayer(){
-		
 
 		// Calculate distances
 		float distanceAB = Vector3.Distance (ySphereAB.transform.position, ySphereBA.transform.position);
@@ -271,41 +224,39 @@ public class DistanceCalc : MonoBehaviour {
 
 		// Yellow layers are in right position 
 		if (distanceThreshold > distanceAB && distanceThreshold > distanceAC && distanceThreshold > distanceCD) {
-			yellowLayerCompleted = true;
+			game.yellowLayerCompleted = true;
 		}
 
 		// Case #
 		//Instructions
-		if (yCase1) {
-			instructions.text = "Case 1: R' U' R U' R' U2 R";
-		}
-		if (yCase2) {
-			instructions.text = "Case 2: L U L' U L U2 L'";
-		}
-		if (yCase3) {
-			instructions.text = "Case 3: R2 U2 R U2 R2";
-		}
-		if (yCase4) {
-			instructions.text = "Case 4: F [R U R' U'] [R U R' U'] F''";
-		}
-		if (yCase5) {
-			instructions.text = "Case 5: F [R U R' U'] F'";
-		}
-		if (yCase6) {
-			instructions.text = "Case 6: [R U R' U'] [R' F R F']";
-		}
-		if (yCase7) {
-			instructions.text = "Case 7: [F R U' R' U' R U R' F']";
-		}
-
-		if (step2Completed) {
-			instructions.text = "Step 3 (and last): L' U R' D2 R U' R' D2 R2";
-		}
+//		if (yCase1) {
+//			instructions.text = "Case 1: R' U' R U' R' U2 R";
+//		}
+//		if (yCase2) {
+//			instructions.text = "Case 2: L U L' U L U2 L'";
+//		}
+//		if (yCase3) {
+//			instructions.text = "Case 3: R2 U2 R U2 R2";
+//		}
+//		if (yCase4) {
+//			instructions.text = "Case 4: F [R U R' U'] [R U R' U'] F''";
+//		}
+//		if (yCase5) {
+//			instructions.text = "Case 5: F [R U R' U'] F'";
+//		}
+//		if (yCase6) {
+//			instructions.text = "Case 6: [R U R' U'] [R' F R F']";
+//		}
+//		if (yCase7) {
+//			instructions.text = "Case 7: [F R U' R' U' R U R' F']";
+//		}
+//
+//		if (step2Completed) {
+//			instructions.text = "Step 3 (and last): L' U R' D2 R U' R' D2 R2";
+//		}
 	}
 
 	public void RestartGame () {
-        instructions.text = "GAME RESTARTED";
-
         Debug.Log ("Reset");
 		Start();
 	}
@@ -324,13 +275,13 @@ public class DistanceCalc : MonoBehaviour {
 	}
 		
 	public void SelectYCase (int selectedCase) {
-		if (selectedCase == 1) {
-			yCase1 = true;
-		}
-		if (selectedCase == 2) {
-			yCase2 = true;
-		}
-		hideYCaseButtons ();
+//		if (selectedCase == 1) {
+//			yCase1 = true;
+//		}
+//		if (selectedCase == 2) {
+//			yCase2 = true;
+//		}
+//		hideYCaseButtons ();
 	}
 
 	private void showWPlacementButtons(){
@@ -339,11 +290,6 @@ public class DistanceCalc : MonoBehaviour {
         TopLayerGazebutton.gameObject.SetActive(true);
         BottomLayerGazebutton.gameObject.SetActive(true);
         UnderLayerGazebutton.gameObject.SetActive(true);
-
-        //Old buttons
-        TopLayerButton.gameObject.SetActive(true);
-		BottomLayerButton.gameObject.SetActive(true);
-		UnderLayerButton.gameObject.SetActive(true);
     }
 
 	private void hideWPlacementButtons(){
@@ -351,30 +297,67 @@ public class DistanceCalc : MonoBehaviour {
         TopLayerGazebutton.gameObject.SetActive(false);
         BottomLayerGazebutton.gameObject.SetActive(false);
         UnderLayerGazebutton.gameObject.SetActive(false);
-
-        //Old buttons
-        TopLayerButton.gameObject.SetActive(false);
-		BottomLayerButton.gameObject.SetActive(false);
-		UnderLayerButton.gameObject.SetActive(false);
 	}
 
 	private void showYCaseButtons(){
         //Gaze buttons
         YCase1Gazebutton.gameObject.SetActive(true);
         YCase2Gazebutton.gameObject.SetActive(true);
-
-        //Old buttons
-        YCase1Button.gameObject.SetActive(true);
-        YCase2Button.gameObject.SetActive(true);
     }
 
 	private void hideYCaseButtons(){
         //Gaze buttons
         YCase1Gazebutton.gameObject.SetActive(false);
         YCase2Gazebutton.gameObject.SetActive(false);
-
-        //Old buttons
-        YCase1Button.gameObject.SetActive(false);
-        YCase2Button.gameObject.SetActive(false);
     }
+}
+
+class GameModel
+{
+	public bool whiteLayerCompleted;
+	public bool step2Completed;
+	public bool yellowLayerCompleted;
+
+}
+
+class InstructionsModel
+{
+	public bool findA;
+	public bool findB;
+	public bool findC;
+	public bool findD;
+
+	public bool matchAB;
+	public bool matchAC;
+	public bool matchCD;
+
+	public bool findYA;
+
+	public bool yCase1;
+	public bool yCase2;
+	public bool yCase3;
+	public bool yCase4;
+	public bool yCase5;
+	public bool yCase6;
+	public bool yCase7;
+}
+
+class CubeModel
+{
+	public bool foundA;
+	public bool foundB;
+	public bool foundC;
+	public bool foundD;
+
+	public bool matchedAB;
+	public bool matchedAC;
+	public bool matchedCD;
+
+	public bool foundYA;
+	public bool foundYB;
+	public bool foundYC;
+	public bool foundYD;
+
+
+
 }

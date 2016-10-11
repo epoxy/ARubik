@@ -31,7 +31,7 @@ public class GazebuttonTrigger : MonoBehaviour
 
     #region PRIVATE_MEMBER_VARIABLES
     private float mFocusedTime = 0;
-    DistanceCalc distCalc = new DistanceCalc();
+	public DistanceCalc distCalc; // = new DistanceCalc();
     #endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -76,7 +76,7 @@ public class GazebuttonTrigger : MonoBehaviour
                         break;
                     case TriggerType.RESET_TRIGGER:
                         Debug.Log("RESET TRIGGER");
-                        //distCalc.RestartGame();
+                        distCalc.RestartGame();
                         break;
                     case TriggerType.CASE1_TRIGGER:
                         Debug.Log("CASE1 TRIGGER");
