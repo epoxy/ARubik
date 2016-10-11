@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" style="enable-background:new 0 0 138.782 138.782;" version="1.1" viewBox="0 0 138.782 138.782" x="0px" y="0px" xml:space="preserve">
+<g id="VuMark-ClearSpace">
+	<rect height="138.782" width="138.782" />
+</g>
+<g id="VuMark-Border">
+	<rect height="136" style="fill:#FFFFFF;" width="136" x="1.391" y="1.391" />
+</g>
+<g id="VuMark-Background">
+	<rect height="131.536" style="display:none;fill:#FFF200;" width="131.536" x="3.623" y="3.623" />
+	<g>
+		<rect height="10" style="fill:#FFFFFF;" width="10" x="44.391" y="44.391" />
+		<rect height="10" style="fill:#FFFFFF;" width="10" x="64.391" y="44.391" />
+		<rect height="10" style="fill:#FFFFFF;" width="10" x="84.391" y="44.391" />
+		<rect height="10" style="fill:#FFFFFF;" width="10" x="44.391" y="64.391" />
+		<rect height="10" style="fill:#FFFFFF;" width="10" x="84.391" y="64.391" />
+		<rect height="10" style="fill:#FFFFFF;" width="10" x="44.391" y="84.391" />
+		<rect height="10" style="fill:#FFFFFF;" width="10" x="64.391" y="84.391" />
+		<rect height="10" style="fill:#FFFFFF;" width="10" x="84.391" y="84.391" />
+	</g>
+</g>
+<g id="VuMark-DarkElements">
+	<rect height="10" id="d0000" width="10" x="44.391" y="74.391" />
+	<rect height="10" id="d0002" width="10" x="54.391" y="84.391" />
+	<rect height="10" id="d0003" width="10" x="44.391" y="54.391" />
+	<rect height="10" id="d0004" width="10" x="54.391" y="54.391" />
+	<rect height="10" id="d0007" width="10" x="64.391" y="64.391" />
+	<rect height="10" id="d0008" width="10" x="74.391" y="74.391" />
+	<rect height="10" id="d0009" width="10" x="74.391" y="84.391" />
+<rect height="10" id="d0010" width="10" x="74.391" y="64.391" />
+	<rect height="10" id="d0014" width="10" x="74.391" y="44.391" />
+	<rect height="10" id="d0015" width="10" x="74.391" y="54.391" />
+	</g>
+<g id="VuMark-BrightElements">
+	<rect height="10" id="b0001" style="fill:#FFFFFF;" width="10" x="54.391" y="74.391" />
+	<rect height="10" id="b0005" style="fill:#FFFFFF;" width="10" x="54.391" y="64.391" />
+	<rect height="10" id="b0006" style="fill:#FFFFFF;" width="10" x="64.391" y="74.391" />
+	<rect height="10" id="b0011" style="fill:#FFFFFF;" width="10" x="84.391" y="74.391" />
+	<rect height="10" id="b0012" style="fill:#FFFFFF;" width="10" x="54.391" y="44.391" />
+	<rect height="10" id="b0013" style="fill:#FFFFFF;" width="10" x="64.391" y="54.391" />
+	<rect height="10" id="b0016" style="fill:#FFFFFF;" width="10" x="84.391" y="54.391" />
+	</g>
+</svg>

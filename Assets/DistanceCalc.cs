@@ -124,7 +124,7 @@ public class DistanceCalc : MonoBehaviour {
 		// Iterate through the list of active trackables
 		//Debug.Log ("List of trackables currently active (tracked): ");
 		foreach (TrackableBehaviour tb in activeTrackables) {
-			//Debug.Log("Trackable: " + tb.TrackableName);
+			Debug.Log("Trackable: " + tb.Trackable.ID);
 
 			if (!game.whiteLayerCompleted) {
 				if(string.Equals(tb.TrackableName,"FrameMarker0")){
@@ -161,7 +161,7 @@ public class DistanceCalc : MonoBehaviour {
 		}
 			
 		if (cube.foundB && instructions.findB) { //Match A & B
-			instructionsLabel.text = "Where is B located?";
+			instructionsLabel.text = "Look at A. Where is B located?";
 			instructions.findB = false;
 			instructions.matchAB = true;
 			showWPlacementButtons ();
@@ -192,6 +192,7 @@ public class DistanceCalc : MonoBehaviour {
 			instructions.matchAB = false;
 			instructions.findC = true;
 			hideWPlacementButtons ();
+			hideLeftRightButtons ();
 			TargetArrowAB.gameObject.SetActive (false);
 		}
 		if (instructions.matchAC && distanceThreshold > distanceAC) {
@@ -215,15 +216,15 @@ public class DistanceCalc : MonoBehaviour {
 	private void matchABInstructions() {
 		// Select where it is located
 		if (WPlacementTop) {
-			instructionsLabel.text = "It is at the top";
+			instructionsLabel.text = "It is at the top. Put it at the bottom layer";
 		}
 		if (WPlacementBottom) {
-			instructionsLabel.text = "Put it under the target";
+			instructionsLabel.text = "Put B under the target. Then,  looking at B. Is it to the left or right? ";
 			hideWPlacementButtons ();
 			showLeftRightButtons ();
 		}
 		if (WPlacementUnder) {
-			instructionsLabel.text = "It is under";
+			instructionsLabel.text = "It is under. Put it on the bottom layer";
 		}
 
 		if (WSelectedLeft) {
