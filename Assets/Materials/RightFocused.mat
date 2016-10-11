@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Case2Focused
+  m_Name: RightFocused
   m_Shader: {fileID: 4800000, guid: 7b8686917890d9a4096a9b6e5cbed0b8, type: 3}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
@@ -48,7 +48,7 @@ Material:
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 2800000, guid: 5c06f14ab2806c04f9b8fb75f8df14d4, type: 3}
+        m_Texture: {fileID: 2800000, guid: a4a70ed59a61445afb63f4b6d13f10b2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:

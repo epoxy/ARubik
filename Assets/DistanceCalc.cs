@@ -11,8 +11,8 @@ public class DistanceCalc : MonoBehaviour {
     public GameObject TopLayerGazebutton;
     public GameObject BottomLayerGazebutton;
     public GameObject UnderLayerGazebutton;
-    public GameObject YCase1Gazebutton;
-    public GameObject YCase2Gazebutton;
+    public GameObject LeftGazebutton;
+    public GameObject RightGazebutton;
 
 	private StateManager sm;
 
@@ -30,6 +30,9 @@ public class DistanceCalc : MonoBehaviour {
 	public GameObject ySphereCD;
 	public GameObject ySphereDC;
 
+	public GameObject TargetArrowAB;
+	public GameObject GlowB;
+
 	private Vector3 originalPositionAB;
 	private Vector3 originalPositionBA;
 
@@ -38,8 +41,8 @@ public class DistanceCalc : MonoBehaviour {
 	private bool WPlacementTop;
 	private bool WPlacementBottom;
 	private bool WPlacementUnder;
-
-
+	private bool WSelectedLeft;
+	private bool WSelectedRight;
 
 	private GameModel game;
 	private CubeModel cube;
@@ -51,7 +54,7 @@ public class DistanceCalc : MonoBehaviour {
 		 sm = TrackerManager.Instance.GetStateManager ();
 
 		//Init text
-		instructionsLabel.text = "Find A";
+		instructionsLabel.text = "Find A and put it in upper left corner";
 
 		// Init model
 		game = new GameModel();
@@ -82,10 +85,14 @@ public class DistanceCalc : MonoBehaviour {
 		WPlacementTop = false;
 		WPlacementBottom = false;
 		WPlacementUnder = false;
-	
+		WSelectedLeft = false;
+		WSelectedRight = false;
 
 		hideWPlacementButtons ();
-		hideYCaseButtons ();
+		hideLeftRightButtons ();
+
+		TargetArrowAB.gameObject.SetActive (false);
+		GlowB.gameObject.SetActive (false);
 
 		game.whiteLayerCompleted = false; 	// Step 1
 		game.step2Completed = false;  		// Step 2
@@ -97,14 +104,16 @@ public class DistanceCalc : MonoBehaviour {
 		
 		iterateTrackables ();
 
+		solveWhiteLayer ();
+
 		// Step #
-		if (!game.whiteLayerCompleted) { // Step 1
-			solveWhiteLayer ();
-		} else if (!game.yellowLayerCompleted) { // Step 2 & 3
-			solveYellowLayer ();
-		} else {
-			instructionsLabel.text = "Winning!";
-		}
+//		if (!game.whiteLayerCompleted) { // Step 1
+//			solveWhiteLayer ();
+//		} else if (!game.yellowLayerCompleted) { // Step 2 & 3
+//			solveYellowLayer ();
+//		} else {
+//			instructionsLabel.text = "Winning!";
+//		}
 	}
 
 	private void iterateTrackables() {
@@ -131,21 +140,7 @@ public class DistanceCalc : MonoBehaviour {
 					cube.foundD = true;
 				}
 			}
-
-			if (game.whiteLayerCompleted) {
-//				if(string.Equals(tb.TrackableName,"FrameMarker4")){
-//					YCase1 = true;
-//				}
-//				if(string.Equals(tb.TrackableName,"FrameMarker5")){
-//					YCase2 = true;
-//				}
-//				if(string.Equals(tb.TrackableName,"FrameMarker6")){
-//					YCase3 = true;
-//				}
-//				if(string.Equals(tb.TrackableName,"FrameMarker7")){
-//					step2Completed = true;
-//				}
-			}
+				
 		}
 	}
 
@@ -161,10 +156,12 @@ public class DistanceCalc : MonoBehaviour {
 			instructionsLabel.text = "Find B";
 			instructions.findA = false;
 			instructions.findB = true;
+			TargetArrowAB.gameObject.SetActive (true);
+			GlowB.gameObject.SetActive (true);
 		}
-
-		if (cube.foundB && instructions.findB) {
-			instructionsLabel.text = "Match A & B";
+			
+		if (cube.foundB && instructions.findB) { //Match A & B
+			instructionsLabel.text = "Where is B located?";
 			instructions.findB = false;
 			instructions.matchAB = true;
 			showWPlacementButtons ();
@@ -184,6 +181,10 @@ public class DistanceCalc : MonoBehaviour {
 			showWPlacementButtons ();
 		}
 
+		if (instructions.matchAB && !cube.matchedAB) {
+			matchABInstructions ();
+		}
+
 		// Dinstace 
 		if (instructions.matchAB && distanceThreshold > distanceAB) {
 			instructionsLabel.text = "Find C";
@@ -191,6 +192,7 @@ public class DistanceCalc : MonoBehaviour {
 			instructions.matchAB = false;
 			instructions.findC = true;
 			hideWPlacementButtons ();
+			TargetArrowAB.gameObject.SetActive (false);
 		}
 		if (instructions.matchAC && distanceThreshold > distanceAC) {
 			instructionsLabel.text = "Find D";
@@ -205,10 +207,32 @@ public class DistanceCalc : MonoBehaviour {
 			instructions.matchCD = false;
 			game.whiteLayerCompleted = true;
 			instructions.findYA = true;
-			showYCaseButtons ();
 			hideWPlacementButtons ();
 		}
 		//Debug.Log (distanceAB);
+	}
+
+	private void matchABInstructions() {
+		// Select where it is located
+		if (WPlacementTop) {
+			instructionsLabel.text = "It is at the top";
+		}
+		if (WPlacementBottom) {
+			instructionsLabel.text = "Put it under the target";
+			hideWPlacementButtons ();
+			showLeftRightButtons ();
+		}
+		if (WPlacementUnder) {
+			instructionsLabel.text = "It is under";
+		}
+
+		if (WSelectedLeft) {
+			instructionsLabel.text = "Left algorithm";
+		}
+		if (WSelectedRight) {
+			instructionsLabel.text = "Right algorithm";
+		}
+
 	}
 
 	private void solveYellowLayer(){
@@ -273,6 +297,16 @@ public class DistanceCalc : MonoBehaviour {
 		}
 		//disableYCaseButtons ();
 	}
+
+	public void SelectLeftRight (int selectedLeftRight) {
+		if (selectedLeftRight == 1) {
+			WSelectedLeft = true;
+		}
+		if (selectedLeftRight == 2) {
+			WSelectedRight = true;
+		}
+		//disableYCaseButtons ();
+	}
 		
 	public void SelectYCase (int selectedCase) {
 //		if (selectedCase == 1) {
@@ -299,16 +333,16 @@ public class DistanceCalc : MonoBehaviour {
         UnderLayerGazebutton.gameObject.SetActive(false);
 	}
 
-	private void showYCaseButtons(){
+	private void showLeftRightButtons(){
         //Gaze buttons
-        YCase1Gazebutton.gameObject.SetActive(true);
-        YCase2Gazebutton.gameObject.SetActive(true);
+		LeftGazebutton.gameObject.SetActive(true);
+		RightGazebutton.gameObject.SetActive(true);
     }
 
-	private void hideYCaseButtons(){
+	private void hideLeftRightButtons(){
         //Gaze buttons
-        YCase1Gazebutton.gameObject.SetActive(false);
-        YCase2Gazebutton.gameObject.SetActive(false);
+		LeftGazebutton.gameObject.SetActive(false);
+		RightGazebutton.gameObject.SetActive(false);
     }
 }
 
