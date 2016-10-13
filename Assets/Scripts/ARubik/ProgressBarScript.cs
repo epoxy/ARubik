@@ -92,7 +92,7 @@ public class ProgressBarScript : MonoBehaviour {
 		obj.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
-	void upLevel(){
+	public void upLevel(){
 		string s = level.ToString();
 		switch(s){
 			case "1":

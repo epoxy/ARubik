@@ -14,6 +14,8 @@ public class DistanceCalc : MonoBehaviour {
     public GameObject LeftGazebutton;
     public GameObject RightGazebutton;
 
+	public ProgressBarScript progressBar;
+
 	private StateManager sm;
 
 	public GameObject wSphereAB;
@@ -59,6 +61,8 @@ public class DistanceCalc : MonoBehaviour {
 		game = new GameModel();
 		cube = new CubeModel ();
 		instructions = new InstructionsModel ();
+
+		progressBar.level = 0;
 
 		//Init varibales for White
 		cube.foundA = false;
@@ -219,6 +223,9 @@ public class DistanceCalc : MonoBehaviour {
 			instructionsLabel.text = "Put B under the target. Then,  looking at B. Is it to the left or right? ";
 			hideWPlacementButtons ();
 			showLeftRightButtons ();
+			progressBar.level = 1;
+			progressBar.upLevel ();
+
 		}
 		if (WPlacementUnder) {
 			instructionsLabel.text = "It is under. Put it on the bottom layer";
@@ -226,9 +233,11 @@ public class DistanceCalc : MonoBehaviour {
 
 		if (WSelectedLeft) {
 			instructionsLabel.text = "Left algorithm";
+			hideLeftRightButtons ();
 		}
 		if (WSelectedRight) {
 			instructionsLabel.text = "Right algorithm";
+			hideLeftRightButtons ();
 		}
 
 	}
