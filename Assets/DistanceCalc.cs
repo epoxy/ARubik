@@ -31,7 +31,6 @@ public class DistanceCalc : MonoBehaviour {
 	public GameObject ySphereDC;
 
 	public GameObject TargetArrowAB;
-	public GameObject GlowB;
 
 	private Vector3 originalPositionAB;
 	private Vector3 originalPositionBA;
@@ -92,7 +91,6 @@ public class DistanceCalc : MonoBehaviour {
 		hideLeftRightButtons ();
 
 		TargetArrowAB.gameObject.SetActive (false);
-		GlowB.gameObject.SetActive (false);
 
 		game.whiteLayerCompleted = false; 	// Step 1
 		game.step2Completed = false;  		// Step 2
@@ -157,7 +155,6 @@ public class DistanceCalc : MonoBehaviour {
 			instructions.findA = false;
 			instructions.findB = true;
 			TargetArrowAB.gameObject.SetActive (true);
-			GlowB.gameObject.SetActive (true);
 		}
 			
 		if (cube.foundB && instructions.findB) { //Match A & B
