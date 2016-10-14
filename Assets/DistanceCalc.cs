@@ -11,8 +11,12 @@ public class DistanceCalc : MonoBehaviour {
     public GameObject TopLayerGazebutton;
     public GameObject BottomLayerGazebutton;
     public GameObject UnderLayerGazebutton;
-    public GameObject LeftGazebutton;
-    public GameObject RightGazebutton;
+    public GameObject LeftTopGazeButton;
+    public GameObject RightTopGazeButton;
+    public GameObject LeftBottomGazeButton;
+    public GameObject RightBottomGazeButton;
+    public GameObject LeftUnderGazeButton;
+    public GameObject RightUnderGazeButton;
 
 	public ProgressBarScript progressBar;
 
@@ -49,8 +53,10 @@ public class DistanceCalc : MonoBehaviour {
 	private CubeModel cube;
 	private InstructionsModel instructions;
 
-	// Use this for initialization
-	void Start () {
+    private enum VerticalLocation { TOP, BOTTOM, UNDER };
+
+    // Use this for initialization
+    void Start () {
 		// Get the Vuforia StateManager
 		 sm = TrackerManager.Instance.GetStateManager ();
 
@@ -82,7 +88,6 @@ public class DistanceCalc : MonoBehaviour {
 		instructions.matchAB = false;
 		instructions.matchAC = false;
 		instructions.matchCD = false;
-
 	
 		// Init buttons 
 		WPlacementTop = false;
@@ -186,7 +191,7 @@ public class DistanceCalc : MonoBehaviour {
 			matchABInstructions ();
 		}
 
-		// Dinstace 
+		// Distance 
 		if (instructions.matchAB && distanceThreshold > distanceAB) {
 			instructionsLabel.text = "Find C";
 			cube.matchedAB = true;
@@ -217,21 +222,22 @@ public class DistanceCalc : MonoBehaviour {
 	private void matchABInstructions() {
 		// Select where it is located
 		if (WPlacementTop) {
-			instructionsLabel.text = "It is at the top. Put it at the bottom layer";
+			instructionsLabel.text = "B is at the upper layer or top layer. Put B at the bottom layer";
+            //TODO Add next step
 		}
 		if (WPlacementBottom) {
-			instructionsLabel.text = "Put B under the target. Then,  looking at B. Is it to the left or right? ";
+			instructionsLabel.text = "Put B under the target. Then, looking at B. Is it to the left or right?";
 			hideWPlacementButtons ();
-			showLeftRightButtons ();
+            showLeftRightButtons(VerticalLocation.BOTTOM);
 			progressBar.level = 1;
 			progressBar.upLevel ();
-
 		}
 		if (WPlacementUnder) {
 			instructionsLabel.text = "It is under. Put it on the bottom layer";
-		}
+            //TODO Add next step
+        }
 
-		if (WSelectedLeft) {
+        if (WSelectedLeft) {
 			instructionsLabel.text = "Left algorithm";
 			hideLeftRightButtons ();
 		}
@@ -239,7 +245,6 @@ public class DistanceCalc : MonoBehaviour {
 			instructionsLabel.text = "Right algorithm";
 			hideLeftRightButtons ();
 		}
-
 	}
 
 	private void solveYellowLayer(){
@@ -292,7 +297,8 @@ public class DistanceCalc : MonoBehaviour {
 		Start();
 	}
 
-	public void SelectWPlacement (int selectedPlacement) {
+    //TODO: For selectedPlacement, create Enum or something else that is more readable than int-values
+    public void SelectWPlacement (int selectedPlacement) {
 		if (selectedPlacement == 1) {
 			WPlacementTop = true;
 		}
@@ -305,7 +311,8 @@ public class DistanceCalc : MonoBehaviour {
 		//disableYCaseButtons ();
 	}
 
-	public void SelectLeftRight (int selectedLeftRight) {
+    //TODO: For selectedLeftRight, create Enum or something else that is more readable than int-values
+    public void SelectLeftRight (int selectedLeftRight) {
 		if (selectedLeftRight == 1) {
 			WSelectedLeft = true;
 		}
@@ -340,16 +347,42 @@ public class DistanceCalc : MonoBehaviour {
         UnderLayerGazebutton.gameObject.SetActive(false);
 	}
 
-	private void showLeftRightButtons(){
-        //Gaze buttons
-		LeftGazebutton.gameObject.SetActive(true);
-		RightGazebutton.gameObject.SetActive(true);
+	private void showLeftRightButtons(VerticalLocation verticalLocation){
+        //Show correct buttons
+        //TODO: Put all buttons to x-axis where z=0. Keep them separeted for now until tested properly. //Anton
+        switch (verticalLocation)
+        {
+            case VerticalLocation.TOP:
+                Debug.Log("TOP");
+                //Show left right buttons for top
+                LeftTopGazeButton.gameObject.SetActive(true);
+                RightTopGazeButton.gameObject.SetActive(true);
+                break;
+            case VerticalLocation.BOTTOM:
+                Debug.Log("BOTTOM");
+                //Show left right buttons for bottom
+                LeftBottomGazeButton.gameObject.SetActive(true);
+                RightBottomGazeButton.gameObject.SetActive(true);
+                break;
+            case VerticalLocation.UNDER:
+                Debug.Log("UNDER");
+                //Show left right buttons for under
+                LeftUnderGazeButton.gameObject.SetActive(true);
+                RightUnderGazeButton.gameObject.SetActive(true);
+                break;
+            default:
+                break;
+        }
     }
 
 	private void hideLeftRightButtons(){
         //Gaze buttons
-		LeftGazebutton.gameObject.SetActive(false);
-		RightGazebutton.gameObject.SetActive(false);
+        LeftTopGazeButton.gameObject.SetActive(false);
+        RightTopGazeButton.gameObject.SetActive(false);
+        LeftBottomGazeButton.gameObject.SetActive(false);
+        RightBottomGazeButton.gameObject.SetActive(false);
+        LeftUnderGazeButton.gameObject.SetActive(false);
+        RightUnderGazeButton.gameObject.SetActive(false);
     }
 }
 
@@ -358,7 +391,6 @@ class GameModel
 	public bool whiteLayerCompleted;
 	public bool step2Completed;
 	public bool yellowLayerCompleted;
-
 }
 
 class InstructionsModel
@@ -398,7 +430,4 @@ class CubeModel
 	public bool foundYB;
 	public bool foundYC;
 	public bool foundYD;
-
-
-
 }

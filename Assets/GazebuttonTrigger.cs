@@ -16,8 +16,12 @@ public class GazebuttonTrigger : MonoBehaviour
         BOTTOM_TRIGGER,
         UNDER_TRIGGER,
         RESET_TRIGGER,
-        LEFT_TRIGGER,
-        RIGHT_TRIGGER
+        LEFT_TOP_TRIGGER,
+        RIGHT_TOP_TRIGGER,
+        LEFT_BOTTOM_TRIGGER,
+        RIGHT_BOTTOM_TRIGGER,
+        LEFT_UNDER_TRIGGER,
+        RIGHT_UNDER_TRIGGER
     }
 
     #region PUBLIC_MEMBER_VARIABLES
@@ -64,7 +68,6 @@ public class GazebuttonTrigger : MonoBehaviour
                 
                 switch (triggerType)
                 {
-                    //TODO: Do the calls to DistanceCalc
                     case TriggerType.TOP_TRIGGER:
                         Debug.Log("TOP TRIGGER");
 						distCalc.SelectWPlacement (1);
@@ -81,11 +84,15 @@ public class GazebuttonTrigger : MonoBehaviour
                         Debug.Log("RESET TRIGGER");
                         distCalc.RestartGame();
                         break;
-                    case TriggerType.LEFT_TRIGGER:
+                    case TriggerType.LEFT_TOP_TRIGGER:
+                    case TriggerType.LEFT_BOTTOM_TRIGGER:
+                    case TriggerType.LEFT_UNDER_TRIGGER:
                         Debug.Log("LEFT TRIGGER");
 						distCalc.SelectLeftRight (1);
                         break;
-					case TriggerType.RIGHT_TRIGGER:
+                    case TriggerType.RIGHT_TOP_TRIGGER:
+                    case TriggerType.RIGHT_BOTTOM_TRIGGER:
+                    case TriggerType.RIGHT_UNDER_TRIGGER:
                         Debug.Log("RIGHT TRIGGER");
 						distCalc.SelectLeftRight (2);
                         break;
