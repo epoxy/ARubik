@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class rotate : MonoBehaviour {
+public class RotateObjectAsCamera : MonoBehaviour {
 
 	public Camera cam;
 
