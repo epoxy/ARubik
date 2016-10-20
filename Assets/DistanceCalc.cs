@@ -18,6 +18,10 @@ public class DistanceCalc : MonoBehaviour {
     public GameObject LeftUnderGazeButton;
     public GameObject RightUnderGazeButton;
 
+	public GameObject AlgorithmAnimation;
+
+	public GameObject TargetImage;
+
 	public ProgressBarScript progressBar;
 
 	private StateManager sm;
@@ -61,7 +65,7 @@ public class DistanceCalc : MonoBehaviour {
 		 sm = TrackerManager.Instance.GetStateManager ();
 
 		//Init text
-		instructionsLabel.text = "Find A and put it in upper left corner";
+		instructionsLabel.text = "Find the first white pice.\nHold the cube so it's in the upper left corner.";
 
 		// Init model
 		game = new GameModel();
@@ -100,6 +104,8 @@ public class DistanceCalc : MonoBehaviour {
 		hideLeftRightButtons ();
 
 		TargetArrowAB.gameObject.SetActive (false);
+		AlgorithmAnimation.gameObject.SetActive (false);
+		TargetImage.gameObject.SetActive (false);
 
 		game.whiteLayerCompleted = false; 	// Step 1
 		game.step2Completed = false;  		// Step 2
@@ -168,11 +174,11 @@ public class DistanceCalc : MonoBehaviour {
 			instructionsLabel.text = "Find B";
 			instructions.findA = false;
 			instructions.findB = true;
-			TargetArrowAB.gameObject.SetActive (true);
+			cube.foundB = true;
 		}
 			
 		if (cube.foundB && instructions.findB) { //Match A & B
-			instructionsLabel.text = "Look at A. Where is B located?";
+			instructionsLabel.text = "Find the white piece with green and orange sides somewhere on the cube.";
 			instructions.findB = false;
 			instructions.matchAB = true;
 			showWPlacementButtons ();
@@ -208,8 +214,13 @@ public class DistanceCalc : MonoBehaviour {
 			hideWPlacementButtons ();
 			hideLeftRightButtons ();
 			TargetArrowAB.gameObject.SetActive (false);
+			AlgorithmAnimation.gameObject.SetActive (false);
 		}
 		if (instructions.matchAC && distanceThreshold > distanceAC) {
+			updateProgressBar(6);
+			updateProgressBar(7);
+			updateProgressBar(8);
+			updateProgressBar(9);
 			instructionsLabel.text = "Find D";
 			cube.matchedAC = true;
 			instructions.matchAC = false;
@@ -217,6 +228,10 @@ public class DistanceCalc : MonoBehaviour {
 			hideWPlacementButtons ();
 		}
 		if (instructions.matchCD && distanceThreshold > distanceCD) {
+			updateProgressBar(10);
+			updateProgressBar(11);
+			updateProgressBar(12);
+			updateProgressBar(13);
 			instructionsLabel.text = "White layer completed!";
 			cube.matchedCD = true;
 			instructions.matchCD = false;
@@ -231,28 +246,32 @@ public class DistanceCalc : MonoBehaviour {
 		// Select where it is located
 		if (WPlacementTop) {
 			updateProgressBar(2);
-			instructionsLabel.text = "B is at the upper layer or top layer. Put B at the bottom layer";
+			instructionsLabel.text = "Turn B so that B is in the the bottom layer";
             //TODO Add next step
 		}
 		if (WPlacementBottom) {
-			updateProgressBar(2);
-			updateProgressBar(3);
-			instructionsLabel.text = "Put B under the target. Then, looking at B. Is it to the left or right?";
+			TargetArrowAB.gameObject.SetActive (true);
+			instructionsLabel.text = "Rotate the under layer so that B underneath the target.";
+			TargetImage.gameObject.SetActive (true);
 			hideWPlacementButtons ();
             showLeftRightButtons(VerticalLocation.BOTTOM);
 		}
 		if (WPlacementUnder) {
 			updateProgressBar(2);
-			instructionsLabel.text = "It is under. Put it on the bottom layer";
+			instructionsLabel.text = "Do an algorithm";
             //TODO Add next step
         }
 
         if (WSelectedLeft) {
-			instructionsLabel.text = "Left algorithm";
+			instructionsLabel.text = "R' D' R - Follow the animation ->";
+			AlgorithmAnimation.gameObject.SetActive (true);
+			TargetImage.gameObject.SetActive (false);
 			hideLeftRightButtons ();
 		}
 		if (WSelectedRight) {
-			instructionsLabel.text = "Right algorithm";
+			instructionsLabel.text = "F D F' - Follow the animation -> ";
+			AlgorithmAnimation.gameObject.SetActive (true);
+			TargetImage.gameObject.SetActive (false);
 			hideLeftRightButtons ();
 		}
 	}

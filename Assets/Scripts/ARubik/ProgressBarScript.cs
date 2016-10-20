@@ -78,6 +78,7 @@ public class ProgressBarScript : MonoBehaviour {
 		disableSprite(task2_2);
 		disableSprite(line2_1hor);
 		disableSprite(line2_1ver);
+		disableSprite(line2_2);
 
 		disableSprite(task3_1);
 		disableSprite(task3_2);
