@@ -52,7 +52,9 @@ public class ProgressBarScript : MonoBehaviour {
         //Color tmp = step1.GetComponent<SpriteRenderer>().color;
  		//tmp.a = transparency;
  		//step1.GetComponent<SpriteRenderer>().color = tmp;
-		
+
+		level = 0;
+
  		setTransparent(step2);
  		setTransparent(step3);
  		setTransparent(step4);
@@ -60,6 +62,34 @@ public class ProgressBarScript : MonoBehaviour {
  		setTransparent(line1_0);
  		setTransparent(line2_0);
  		setTransparent(line3_0);
+
+		disableSprite(check1);
+		disableSprite(check2);
+		disableSprite(check3);
+		disableSprite(check4);
+		disableSprite(check2_1);
+		disableSprite(check2_2);
+		disableSprite(check3_1);
+		disableSprite(check3_2);
+		disableSprite(check4_1);
+		disableSprite(check4_2);
+
+		disableSprite(task2_1);
+		disableSprite(task2_2);
+		disableSprite(line2_1hor);
+		disableSprite(line2_1ver);
+
+		disableSprite(task3_1);
+		disableSprite(task3_2);
+		disableSprite(line3_1hor);
+		disableSprite(line3_1ver);
+		disableSprite(line3_2);
+
+		disableSprite(task4_1);
+		disableSprite(task4_2);
+		disableSprite(line4_1hor);
+		disableSprite(line4_1ver);
+		disableSprite(line4_2);
 
 	}
 	
@@ -150,6 +180,10 @@ public class ProgressBarScript : MonoBehaviour {
 				break;
 
 		}
+	}
+
+	public void reset(){
+		Start ();
 	}
 
 	void level0(){

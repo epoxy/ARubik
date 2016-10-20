@@ -68,7 +68,7 @@ public class DistanceCalc : MonoBehaviour {
 		cube = new CubeModel ();
 		instructions = new InstructionsModel ();
 
-		progressBar.level = 0;
+		progressBar.reset ();
 
 		//Init varibales for White
 		cube.foundA = false;
@@ -108,6 +108,10 @@ public class DistanceCalc : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (Input.GetKeyDown(KeyCode.UpArrow)){
+			RestartGame ();
+		}
 		
 		iterateTrackables ();
 
@@ -160,6 +164,7 @@ public class DistanceCalc : MonoBehaviour {
 
 		//Instructions
 		if (cube.foundA && instructions.findA) {
+			updateProgressBar (1);
 			instructionsLabel.text = "Find B";
 			instructions.findA = false;
 			instructions.findB = true;
@@ -193,6 +198,9 @@ public class DistanceCalc : MonoBehaviour {
 
 		// Distance 
 		if (instructions.matchAB && distanceThreshold > distanceAB) {
+			updateProgressBar(3);
+			updateProgressBar(4);
+			updateProgressBar(5);
 			instructionsLabel.text = "Find C";
 			cube.matchedAB = true;
 			instructions.matchAB = false;
@@ -222,17 +230,19 @@ public class DistanceCalc : MonoBehaviour {
 	private void matchABInstructions() {
 		// Select where it is located
 		if (WPlacementTop) {
+			updateProgressBar(2);
 			instructionsLabel.text = "B is at the upper layer or top layer. Put B at the bottom layer";
             //TODO Add next step
 		}
 		if (WPlacementBottom) {
+			updateProgressBar(2);
+			updateProgressBar(3);
 			instructionsLabel.text = "Put B under the target. Then, looking at B. Is it to the left or right?";
 			hideWPlacementButtons ();
             showLeftRightButtons(VerticalLocation.BOTTOM);
-			progressBar.level = 1;
-			progressBar.upLevel ();
 		}
 		if (WPlacementUnder) {
+			updateProgressBar(2);
 			instructionsLabel.text = "It is under. Put it on the bottom layer";
             //TODO Add next step
         }
@@ -384,6 +394,12 @@ public class DistanceCalc : MonoBehaviour {
         LeftUnderGazeButton.gameObject.SetActive(false);
         RightUnderGazeButton.gameObject.SetActive(false);
     }
+
+	private void updateProgressBar(int setLevel){
+		progressBar.level = setLevel;
+		progressBar.upLevel ();
+	}
+		
 }
 
 class GameModel
@@ -431,3 +447,4 @@ class CubeModel
 	public bool foundYC;
 	public bool foundYD;
 }
+	
