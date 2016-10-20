@@ -66,7 +66,7 @@ public class DistanceCalc : MonoBehaviour {
 		 sm = TrackerManager.Instance.GetStateManager ();
 
 		//Init text
-		instructionsLabel.text = "Find the first white pice.\nHold the cube so it's in the upper left corner.";
+		instructionsLabel.text = "Find the WHITE piece with RED and GREEN sides.\nHold the cube so it's in the upper left corner.";
 
 		// Init model
 		game = new GameModel();
@@ -176,13 +176,13 @@ public class DistanceCalc : MonoBehaviour {
 		//Instructions
 		if (cube.foundA && instructions.findA) {
 			updateProgressBar (1);
-			instructionsLabel.text = "Find the white piece with green and orange sides somewhere on the cube.";
+			instructionsLabel.text = "Next: find the WHITE piece with GREEN and ORANGE sides somewhere on the cube.";
 			instructions.findA = false;
 			instructions.findB = true;
 		}
 			
 		if (cube.foundB && instructions.findB) { //Match A & B
-			instructionsLabel.text = "Where is it located?";
+			instructionsLabel.text = "Where is this piece located?\n Look back at the first piece and select the location.";
 			instructions.findB = false;
 			instructions.matchAB = true;
 			showWPlacementButtons ();
@@ -255,7 +255,7 @@ public class DistanceCalc : MonoBehaviour {
 		}
 		if (WPlacementBottom) {
 			TargetArrowAB.gameObject.SetActive (true);
-			instructionsLabel.text = "Rotate the under layer so that the whtie piece is underneath its target.";
+			instructionsLabel.text = "Rotate the under layer so that the white piece is underneath its target.\nSelect which side it's on.";
 			TargetImage.gameObject.SetActive (true);
 			hideWPlacementButtons ();
             showLeftRightButtons(VerticalLocation.BOTTOM);
