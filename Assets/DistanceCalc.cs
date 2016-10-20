@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.IO;
 using Vuforia;
 using System.Collections.Generic;
 
@@ -115,6 +116,10 @@ public class DistanceCalc : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		if (Input.touchCount > 0) {
+			RestartGame ();
+		}
+
 		if (Input.GetKeyDown(KeyCode.UpArrow)){
 			RestartGame ();
 		}
@@ -171,14 +176,13 @@ public class DistanceCalc : MonoBehaviour {
 		//Instructions
 		if (cube.foundA && instructions.findA) {
 			updateProgressBar (1);
-			instructionsLabel.text = "Find B";
+			instructionsLabel.text = "Find the white piece with green and orange sides somewhere on the cube.";
 			instructions.findA = false;
 			instructions.findB = true;
-			cube.foundB = true;
 		}
 			
 		if (cube.foundB && instructions.findB) { //Match A & B
-			instructionsLabel.text = "Find the white piece with green and orange sides somewhere on the cube.";
+			instructionsLabel.text = "Where is it located?";
 			instructions.findB = false;
 			instructions.matchAB = true;
 			showWPlacementButtons ();
@@ -251,7 +255,7 @@ public class DistanceCalc : MonoBehaviour {
 		}
 		if (WPlacementBottom) {
 			TargetArrowAB.gameObject.SetActive (true);
-			instructionsLabel.text = "Rotate the under layer so that B underneath the target.";
+			instructionsLabel.text = "Rotate the under layer so that the whtie piece is underneath its target.";
 			TargetImage.gameObject.SetActive (true);
 			hideWPlacementButtons ();
             showLeftRightButtons(VerticalLocation.BOTTOM);
