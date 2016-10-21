@@ -13,7 +13,8 @@ public class RotateCube : MonoBehaviour {
     private int i;
 
    // private string[] start = new string[4]{"rprime", "dprime", "r", "d"};
-    private string[] scramble = new string[4] {"d", "l", "dprime", "lprime"};
+    //private string[] scramble = new string[4] {"d", "l", "dprime", "lprime"};
+	private string[] scramble = new string[6] {"l", "f", "u","uprime", "fprime", "lprime"};
 
 
     private int scrambleIndex = 0; // Keeps track of where in the scramble array we are 
@@ -23,7 +24,6 @@ public class RotateCube : MonoBehaviour {
  	private float rotationAmount = 90f; // We only want to rotate 90 degrees at a time
 
  	private string rot; // string to indicate what rotation is on, i.e. r, rprime, l, lprime
- 	private float b = 0f;
 	void Start () {
 
 		//All cubes tagged as Cube
@@ -39,8 +39,6 @@ public class RotateCube : MonoBehaviour {
          nextRotation();
 
 	}
-
-	private bool up = false;
 
 	// Update is called once per frame
 	void Update () {
@@ -63,6 +61,8 @@ public class RotateCube : MonoBehaviour {
 				up = false;
 			}
 		}*/
+
+		//printCubePositions ();
 
 		switch(rot){
 			case "r":
@@ -148,7 +148,7 @@ public class RotateCube : MonoBehaviour {
          //Create new pivot point
          pivot = new GameObject("Pivot");
          //This point is not world space relative, you would have to add the world space vector of the entire cube first.
-         pivot.transform.position = new Vector3(1,-.5f,0);
+         pivot.transform.position = new Vector3(1,-0.5f,3);
          pivot.transform.parent = rubix.transform;
       	
       	 roundCubePositions();
@@ -197,13 +197,13 @@ public class RotateCube : MonoBehaviour {
        
     void roundCubePositions(){
     	foreach(GameObject cube in cubes){
-    		float posX = (float) Math.Round(cube.transform.position.x);
-    		float posY = (float) Math.Round(cube.transform.position.y);
-    		float posZ = (float) Math.Round(cube.transform.position.z);
+    		float posX = (float) Math.Round(cube.transform.position.x,2);
+    		float posY = (float) Math.Round(cube.transform.position.y,2);
+    		float posZ = (float) Math.Round(cube.transform.position.z,2);
     		
     		cube.transform.position = new Vector3(posX, posY, posZ);
-    		//Debug.Log("rounding up cube pos: "+ cube.transform.position);
-    		//Debug.Log("cube rotations: "+ cube.transform.rotation);
+//    		Debug.Log("rounding up cube pos: "+ cube.transform.position);
+//    		Debug.Log("cube rotations: "+ cube.transform.rotation);
     		//cube.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     		
     	}
@@ -365,7 +365,8 @@ public class RotateCube : MonoBehaviour {
       
    		foreach(GameObject cube in cubes)
          {
-	        if(Math.Round(cube.transform.position.x) == 2)
+			//print("x: " + cube.transform.position.x); 
+	        if(cube.transform.position.x == 1.1f)
 	        {
 	            cube.transform.parent = pivot.transform;
 	            side[i] = cube;
@@ -379,8 +380,9 @@ public class RotateCube : MonoBehaviour {
      {
          foreach(GameObject cube in cubes)
          {
+			print("x: " + cube.transform.position.x); 
 			Debug.Log (cube.transform.position);
-             if(Math.Round(cube.transform.position.x) == 0)
+             if(cube.transform.position.x == 0.9f)
              {
                  cube.transform.parent = pivot.transform;
                  side[i] = cube;
@@ -393,7 +395,8 @@ public class RotateCube : MonoBehaviour {
      {
          foreach(GameObject cube in cubes)
          {
-             if(Math.Round(cube.transform.position.y) == 2)
+			print ("y: " + cube.transform.position.y);
+             if(cube.transform.position.y == -0.4f)
              {
                  cube.transform.parent = pivot.transform;
                  side[i] = cube;
@@ -407,7 +410,8 @@ public class RotateCube : MonoBehaviour {
      {
          foreach(GameObject cube in cubes)
          {
-             if(cube.transform.position.y == 0)
+			print ("y: " + cube.transform.position.y);
+             if(cube.transform.position.y == -0.6f)
              {
                  cube.transform.parent = pivot.transform;
                  side[i] = cube;
@@ -420,7 +424,8 @@ public class RotateCube : MonoBehaviour {
      {
          foreach(GameObject cube in cubes)
          {
-             if(cube.transform.position.z == -1)
+			print ("z: " + cube.transform.position.z);	
+             if(cube.transform.position.z == 2.9f)
              {
                  cube.transform.parent = pivot.transform;
                  side[i] = cube;
@@ -433,7 +438,8 @@ public class RotateCube : MonoBehaviour {
      {
          foreach(GameObject cube in cubes)
          {
-             if(cube.transform.position.z == 1)
+			print ("z: " + cube.transform.position.z);
+             if(cube.transform.position.z == 3.1f)
              {
                  cube.transform.parent = pivot.transform;
                  side[i] = cube;
