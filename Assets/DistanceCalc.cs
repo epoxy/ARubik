@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class DistanceCalc : MonoBehaviour {
 	public UnityEngine.UI.Text instructionsLabel;
-    
+
 	public GameObject ResetGazebutton;
     public GameObject TopLayerGazebutton;
     public GameObject BottomLayerGazebutton;
@@ -24,6 +24,7 @@ public class DistanceCalc : MonoBehaviour {
 	public GameObject TargetImage;
 
 	public ProgressBarScript progressBar;
+	public RotateCube rubix;
 
 	private StateManager sm;
 
@@ -93,6 +94,8 @@ public class DistanceCalc : MonoBehaviour {
 		instructions.matchAB = false;
 		instructions.matchAC = false;
 		instructions.matchCD = false;
+
+		instructions.animationShowing = false;
 	
 		// Init buttons 
 		WPlacementTop = false;
@@ -105,7 +108,7 @@ public class DistanceCalc : MonoBehaviour {
 		hideLeftRightButtons ();
 
 		TargetArrowAB.gameObject.SetActive (false);
-		AlgorithmAnimation.gameObject.SetActive (false);
+		//AlgorithmAnimation.gameObject.SetActive (false);
 		TargetImage.gameObject.SetActive (false);
 
 		game.whiteLayerCompleted = false; 	// Step 1
@@ -121,8 +124,15 @@ public class DistanceCalc : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(KeyCode.UpArrow)){
-			RestartGame ();
+			//RestartGame ();
+			AlgorithmAnimation.gameObject.SetActive (true);
+			//Instantiate (AlgorithmAnimation, AlgorithmAnimation.transform.position, AlgorithmAnimation.transform.rotation);
+			rubix.setAlgorithm(new string[3] {"r", "f", "l",});
+			rubix.resetCube ();
+
+
 		}
+
 		
 		iterateTrackables ();
 
@@ -146,7 +156,6 @@ public class DistanceCalc : MonoBehaviour {
 		// Iterate through the list of active trackables
 		//Debug.Log ("List of trackables currently active (tracked): ");
 		foreach (TrackableBehaviour tb in activeTrackables) {
-			Debug.Log("Trackable: " + tb.Trackable.ID);
 
 			if (!game.whiteLayerCompleted) {
 				if(string.Equals(tb.TrackableName,"FrameMarker0")){
@@ -256,7 +265,9 @@ public class DistanceCalc : MonoBehaviour {
 		if (WPlacementBottom) {
 			TargetArrowAB.gameObject.SetActive (true);
 			instructionsLabel.text = "Rotate the under layer so that the white piece is underneath its target.\nSelect which side it's on.";
-			TargetImage.gameObject.SetActive (true);
+
+
+
 			hideWPlacementButtons ();
             showLeftRightButtons(VerticalLocation.BOTTOM);
 		}
@@ -266,15 +277,27 @@ public class DistanceCalc : MonoBehaviour {
             //TODO Add next step
         }
 
-        if (WSelectedLeft) {
+		if (WSelectedLeft && !instructions.animationShowing) {
 			instructionsLabel.text = "R' D' R - Follow the animation ->";
+
+			instructions.animationShowing = true;
 			AlgorithmAnimation.gameObject.SetActive (true);
+			rubix.setAlgorithm(new string[3] {"f", "f", "l",});
+			rubix.resetCube ();
+
+
+
 			TargetImage.gameObject.SetActive (false);
 			hideLeftRightButtons ();
 		}
-		if (WSelectedRight) {
+		if (WSelectedRight && !instructions.animationShowing) {
 			instructionsLabel.text = "F D F' - Follow the animation -> ";
+
+			instructions.animationShowing = true;
 			AlgorithmAnimation.gameObject.SetActive (true);
+			rubix.setAlgorithm(new string[3] {"f", "f", "l",});
+			rubix.resetCube ();
+
 			TargetImage.gameObject.SetActive (false);
 			hideLeftRightButtons ();
 		}
@@ -444,6 +467,8 @@ class InstructionsModel
 	public bool matchCD;
 
 	public bool findYA;
+
+	public bool animationShowing;
 
 	public bool yCase1;
 	public bool yCase2;
