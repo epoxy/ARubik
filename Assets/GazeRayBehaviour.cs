@@ -4,7 +4,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using Vuforia;
 
 public class GazeRayBehaviour : MonoBehaviour
 {
@@ -16,6 +16,14 @@ public class GazeRayBehaviour : MonoBehaviour
     #region MONOBEHAVIOUR_METHODS
     void Update()
     {
+        bool focusModeSet = CameraDevice.Instance.SetFocusMode(
+        CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
+
+        if (!focusModeSet)
+        {
+            Debug.Log("Failed to set focus mode (unsupported mode).");
+        }
+
         // Check if the Head gaze direction is intersecting any of the ViewTriggers
         RaycastHit hit;
         Ray cameraGaze = new Ray(this.transform.position, this.transform.forward);
