@@ -16,6 +16,7 @@ public class GazeRayBehaviour : MonoBehaviour
     #region MONOBEHAVIOUR_METHODS
     void Update()
     {
+        //Setting focus mode to contiuous auto
         bool focusModeSet = CameraDevice.Instance.SetFocusMode(
         CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
 
