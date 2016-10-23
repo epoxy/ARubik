@@ -40,6 +40,10 @@ public class RotateCube : MonoBehaviour {
 
 	}
 
+//	public void setScramble(string algorithm){
+//		private string[] scramble = new string[6] {"l", "f", "u","uprime", "fprime", "lprime"};
+//	}
+
 	// Update is called once per frame
 	void Update () {
 
@@ -197,9 +201,9 @@ public class RotateCube : MonoBehaviour {
        
     void roundCubePositions(){
     	foreach(GameObject cube in cubes){
-    		float posX = (float) Math.Round(cube.transform.position.x,2);
-    		float posY = (float) Math.Round(cube.transform.position.y,2);
-    		float posZ = (float) Math.Round(cube.transform.position.z,2);
+    		float posX = (float) Math.Round(cube.transform.position.x,1);
+    		float posY = (float) Math.Round(cube.transform.position.y,1);
+    		float posZ = (float) Math.Round(cube.transform.position.z,1);
     		
     		cube.transform.position = new Vector3(posX, posY, posZ);
 //    		Debug.Log("rounding up cube pos: "+ cube.transform.position);
@@ -447,4 +451,13 @@ public class RotateCube : MonoBehaviour {
              }
          }
      }
+
+	public void resetCube(){
+		scrambleIndex = 0;
+		totalRotation = 0;
+		Start ();
+	}
+	public void setAlgorithm(string[] algorithm){
+		scramble = algorithm;
+	}
 }

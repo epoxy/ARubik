@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Cube
+  - step1
+  - Rubix
   layers:
   - Default
   - TransparentFX
