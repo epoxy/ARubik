@@ -165,8 +165,8 @@ PlayerSettings:
   AndroidTargetDevice: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: C:/Users/Epoxy/workspace/Unity/ARubik/arubik_keystore.keystore
+  AndroidKeyaliasName: epoxy
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
   androidEnableBanner: 1
