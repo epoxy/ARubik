@@ -19,10 +19,6 @@ public class DistanceCalc : MonoBehaviour {
     public GameObject LeftUnderGazeButton;
     public GameObject RightUnderGazeButton;
 
-	public GameObject AlgorithmAnimation;
-
-	public GameObject TargetImage;
-
 	public ProgressBarScript progressBar;
 	public RotateCube rubix;
 
@@ -43,6 +39,8 @@ public class DistanceCalc : MonoBehaviour {
 	public GameObject ySphereDC;
 
 	public GameObject TargetArrowAB;
+	public GameObject TargetArrowAC;
+	public GameObject TargetArrowCD;
 
 	private Vector3 originalPositionAB;
 	private Vector3 originalPositionBA;
@@ -108,8 +106,8 @@ public class DistanceCalc : MonoBehaviour {
 		hideLeftRightButtons ();
 
 		TargetArrowAB.gameObject.SetActive (false);
-		//AlgorithmAnimation.gameObject.SetActive (false);
-		TargetImage.gameObject.SetActive (false);
+		TargetArrowAC.gameObject.SetActive (false);
+		TargetArrowCD.gameObject.SetActive (false);
 
 		game.whiteLayerCompleted = false; 	// Step 1
 		game.step2Completed = false;  		// Step 2
@@ -124,12 +122,7 @@ public class DistanceCalc : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(KeyCode.UpArrow)){
-			//RestartGame ();
-			AlgorithmAnimation.gameObject.SetActive (true);
-			//Instantiate (AlgorithmAnimation, AlgorithmAnimation.transform.position, AlgorithmAnimation.transform.rotation);
-			rubix.setAlgorithm(new string[3] {"r", "f", "l",});
-			rubix.resetCube ();
-
+			RestartGame ();
 
 		}
 
@@ -212,7 +205,13 @@ public class DistanceCalc : MonoBehaviour {
 		}
 
 		if (instructions.matchAB && !cube.matchedAB) {
-			matchABInstructions ();
+			matchWhiteLayerInstructions ();
+		}
+		if (instructions.matchAC && !cube.matchedAC) {
+			matchWhiteLayerInstructions ();
+		}
+		if (instructions.matchCD && !cube.matchedCD) {
+			matchWhiteLayerInstructions ();
 		}
 
 		// Distance 
@@ -227,7 +226,6 @@ public class DistanceCalc : MonoBehaviour {
 			hideWPlacementButtons ();
 			hideLeftRightButtons ();
 			TargetArrowAB.gameObject.SetActive (false);
-			AlgorithmAnimation.gameObject.SetActive (false);
 		}
 		if (instructions.matchAC && distanceThreshold > distanceAC) {
 			updateProgressBar(6);
@@ -239,6 +237,7 @@ public class DistanceCalc : MonoBehaviour {
 			instructions.matchAC = false;
 			instructions.findD = true;
 			hideWPlacementButtons ();
+			TargetArrowAC.gameObject.SetActive (false);
 		}
 		if (instructions.matchCD && distanceThreshold > distanceCD) {
 			updateProgressBar(10);
@@ -251,54 +250,39 @@ public class DistanceCalc : MonoBehaviour {
 			game.whiteLayerCompleted = true;
 			instructions.findYA = true;
 			hideWPlacementButtons ();
+			TargetArrowCD.gameObject.SetActive (false);
 		}
 		//Debug.Log (distanceAB);
 	}
 
-	private void matchABInstructions() {
+	private void matchWhiteLayerInstructions() {
 		// Select where it is located
 		if (WPlacementTop) {
 			updateProgressBar(2);
-			instructionsLabel.text = "Turn B so that B is in the the bottom layer";
+			instructionsLabel.text = "Follow the animation ->";
             //TODO Add next step
-		}
-		if (WPlacementBottom) {
-			TargetArrowAB.gameObject.SetActive (true);
-			instructionsLabel.text = "Rotate the under layer so that the white piece is underneath its target.\nSelect which side it's on.";
-
-
-
-			hideWPlacementButtons ();
-            showLeftRightButtons(VerticalLocation.BOTTOM);
 		}
 		if (WPlacementUnder) {
 			updateProgressBar(2);
 			instructionsLabel.text = "Follow the animation ->";
-            //TODO Add next step
-        }
-
+			//TODO Add next step
+		}
+		if (WPlacementBottom) {
+			if (instructions.matchAB) TargetArrowAB.gameObject.SetActive (true);
+			if (instructions.matchAC) TargetArrowAC.gameObject.SetActive (true);
+			if (instructions.matchCD) TargetArrowCD.gameObject.SetActive (true);
+			instructionsLabel.text = "Rotate the under layer so that the white piece is underneath its target.\nSelect which side it's on.";
+			hideWPlacementButtons ();
+            showLeftRightButtons(VerticalLocation.BOTTOM);
+		}
 		if (WSelectedLeft && !instructions.animationShowing) {
 			instructionsLabel.text = "Follow the animation ->";
-
 			instructions.animationShowing = true;
-			AlgorithmAnimation.gameObject.SetActive (true);
-			rubix.setAlgorithm(new string[3] {"rprime", "dprime", "r",});
-			rubix.resetCube ();
-
-
-
-			TargetImage.gameObject.SetActive (false);
 			hideLeftRightButtons ();
 		}
 		if (WSelectedRight && !instructions.animationShowing) {
 			instructionsLabel.text = "Follow the animation -> ";
-
 			instructions.animationShowing = true;
-			AlgorithmAnimation.gameObject.SetActive (true);
-			rubix.setAlgorithm(new string[3] {"f", "dprime", "fprime",});
-			rubix.resetCube ();
-
-			TargetImage.gameObject.SetActive (false);
 			hideLeftRightButtons ();
 		}
 	}
