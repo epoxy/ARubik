@@ -185,7 +185,7 @@ public class DistanceCalc : MonoBehaviour {
 		//Instructions
 		if (cube.foundA && instructions.findA) {
 			updateProgressBar (1);
-			instructionsLabel.text = "Next: find the WHITE piece with GREEN and ORANGE sides somewhere on the cube.";
+			instructionsLabel.text = "Find the WHITE piece with GREEN and ORANGE sides somewhere on the cube.";
 			instructions.findA = false;
 			instructions.findB = true;
 		}
@@ -197,15 +197,15 @@ public class DistanceCalc : MonoBehaviour {
 			showWPlacementButtons ();
 		}
 
-		if (cube.foundC && instructions.findC) {
-			instructionsLabel.text = "Match A & C";
+		if (cube.foundC && instructions.findC) { // Match A & C
+			instructionsLabel.text = "Where is this piece located?\n Look back at the first piece and select the location.";
 			instructions.findC = false;
 			instructions.matchAC = true;
 			showWPlacementButtons ();
 		}
 
-		if (cube.foundD && instructions.findD) {
-			instructionsLabel.text = "Match C & D";
+		if (cube.foundD && instructions.findD) { //Match C & D
+			instructionsLabel.text = "Where is this piece located?\n Look back at the first piece and select the location.";
 			instructions.findD = false;
 			instructions.matchCD = true;
 			showWPlacementButtons ();
@@ -220,7 +220,7 @@ public class DistanceCalc : MonoBehaviour {
 			updateProgressBar(3);
 			updateProgressBar(4);
 			updateProgressBar(5);
-			instructionsLabel.text = "Find C";
+			instructionsLabel.text = "Find the WHITE piece with RED and BLUE sides somewhere on the cube";
 			cube.matchedAB = true;
 			instructions.matchAB = false;
 			instructions.findC = true;
@@ -234,7 +234,7 @@ public class DistanceCalc : MonoBehaviour {
 			updateProgressBar(7);
 			updateProgressBar(8);
 			updateProgressBar(9);
-			instructionsLabel.text = "Find D";
+			instructionsLabel.text = "Find the WHITE piece with BLUE and ORANGE sides somewhere on the cube";
 			cube.matchedAC = true;
 			instructions.matchAC = false;
 			instructions.findD = true;
@@ -245,7 +245,7 @@ public class DistanceCalc : MonoBehaviour {
 			updateProgressBar(11);
 			updateProgressBar(12);
 			updateProgressBar(13);
-			instructionsLabel.text = "White layer completed!";
+			instructionsLabel.text = "White layer completed.\nSolve the yellow layer";
 			cube.matchedCD = true;
 			instructions.matchCD = false;
 			game.whiteLayerCompleted = true;
@@ -273,16 +273,16 @@ public class DistanceCalc : MonoBehaviour {
 		}
 		if (WPlacementUnder) {
 			updateProgressBar(2);
-			instructionsLabel.text = "Do an algorithm";
+			instructionsLabel.text = "Follow the animation ->";
             //TODO Add next step
         }
 
 		if (WSelectedLeft && !instructions.animationShowing) {
-			instructionsLabel.text = "R' D' R - Follow the animation ->";
+			instructionsLabel.text = "Follow the animation ->";
 
 			instructions.animationShowing = true;
 			AlgorithmAnimation.gameObject.SetActive (true);
-			rubix.setAlgorithm(new string[3] {"f", "f", "l",});
+			rubix.setAlgorithm(new string[3] {"rprime", "dprime", "r",});
 			rubix.resetCube ();
 
 
@@ -291,11 +291,11 @@ public class DistanceCalc : MonoBehaviour {
 			hideLeftRightButtons ();
 		}
 		if (WSelectedRight && !instructions.animationShowing) {
-			instructionsLabel.text = "F D F' - Follow the animation -> ";
+			instructionsLabel.text = "Follow the animation -> ";
 
 			instructions.animationShowing = true;
 			AlgorithmAnimation.gameObject.SetActive (true);
-			rubix.setAlgorithm(new string[3] {"f", "f", "l",});
+			rubix.setAlgorithm(new string[3] {"f", "dprime", "fprime",});
 			rubix.resetCube ();
 
 			TargetImage.gameObject.SetActive (false);
