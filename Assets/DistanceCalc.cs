@@ -19,6 +19,9 @@ public class DistanceCalc : MonoBehaviour {
     public GameObject LeftUnderGazeButton;
     public GameObject RightUnderGazeButton;
 
+	public GameObject LeftBottomLayerAlgorithm;
+	public GameObject RightBottomLayerAlgorithm;
+
 	public ProgressBarScript progressBar;
 	public RotateCube rubix;
 
@@ -108,6 +111,9 @@ public class DistanceCalc : MonoBehaviour {
 		TargetArrowAB.gameObject.SetActive (false);
 		TargetArrowAC.gameObject.SetActive (false);
 		TargetArrowCD.gameObject.SetActive (false);
+
+		LeftBottomLayerAlgorithm.gameObject.SetActive(false);
+		RightBottomLayerAlgorithm.gameObject.SetActive (false);
 
 		game.whiteLayerCompleted = false; 	// Step 1
 		game.step2Completed = false;  		// Step 2
@@ -278,10 +284,12 @@ public class DistanceCalc : MonoBehaviour {
 		if (WSelectedLeft && !instructions.animationShowing) {
 			instructionsLabel.text = "Follow the animation ->";
 			instructions.animationShowing = true;
+			LeftBottomLayerAlgorithm.gameObject.SetActive (true);
 			hideLeftRightButtons ();
 		}
 		if (WSelectedRight && !instructions.animationShowing) {
 			instructionsLabel.text = "Follow the animation -> ";
+			RightBottomLayerAlgorithm.gameObject.SetActive (true);
 			instructions.animationShowing = true;
 			hideLeftRightButtons ();
 		}
