@@ -98,12 +98,7 @@ public class DistanceCalc : MonoBehaviour {
 
 		instructions.animationShowing = false;
 	
-		// Init buttons 
-		WPlacementTop = false;
-		WPlacementBottom = false;
-		WPlacementUnder = false;
-		WSelectedLeft = false;
-		WSelectedRight = false;
+		resetPlacementButtons ();
 
 		hideWPlacementButtons ();
 		hideLeftRightButtons ();
@@ -112,8 +107,7 @@ public class DistanceCalc : MonoBehaviour {
 		TargetArrowAC.gameObject.SetActive (false);
 		TargetArrowCD.gameObject.SetActive (false);
 
-		LeftBottomLayerAlgorithm.gameObject.SetActive(false);
-		RightBottomLayerAlgorithm.gameObject.SetActive (false);
+		disableAnimations ();
 
 		game.whiteLayerCompleted = false; 	// Step 1
 		game.step2Completed = false;  		// Step 2
@@ -232,6 +226,8 @@ public class DistanceCalc : MonoBehaviour {
 			hideWPlacementButtons ();
 			hideLeftRightButtons ();
 			TargetArrowAB.gameObject.SetActive (false);
+			disableAnimations ();
+			resetPlacementButtons ();
 		}
 		if (instructions.matchAC && distanceThreshold > distanceAC) {
 			updateProgressBar(6);
@@ -244,6 +240,7 @@ public class DistanceCalc : MonoBehaviour {
 			instructions.findD = true;
 			hideWPlacementButtons ();
 			TargetArrowAC.gameObject.SetActive (false);
+			resetPlacementButtons ();
 		}
 		if (instructions.matchCD && distanceThreshold > distanceCD) {
 			updateProgressBar(10);
@@ -257,42 +254,44 @@ public class DistanceCalc : MonoBehaviour {
 			instructions.findYA = true;
 			hideWPlacementButtons ();
 			TargetArrowCD.gameObject.SetActive (false);
+			resetPlacementButtons ();
 		}
 		//Debug.Log (distanceAB);
 	}
 
 	private void matchWhiteLayerInstructions() {
-		// Select where it is located
-		if (WPlacementTop) {
-			updateProgressBar(2);
-			instructionsLabel.text = "Follow the animation ->";
-            //TODO Add next step
+		if (!instructions.animationShowing) {
+			if (WSelectedLeft) {
+				instructionsLabel.text = "";
+				instructions.animationShowing = true;
+				LeftBottomLayerAlgorithm.gameObject.SetActive (true);
+				hideLeftRightButtons ();
+			} else if (WSelectedRight) {
+				instructionsLabel.text = "";
+				RightBottomLayerAlgorithm.gameObject.SetActive (true);
+				instructions.animationShowing = true;
+				hideLeftRightButtons ();
+			} else if (WPlacementBottom) {
+				if (instructions.matchAB)
+					TargetArrowAB.gameObject.SetActive (true);
+				if (instructions.matchAC)
+					TargetArrowAC.gameObject.SetActive (true);
+				if (instructions.matchCD)
+					TargetArrowCD.gameObject.SetActive (true);
+				instructionsLabel.text = "Rotate the under layer so that the white piece is underneath its target.\nSelect which side it's on.";
+				hideWPlacementButtons ();
+				showLeftRightButtons (VerticalLocation.BOTTOM);
+			} else if (WPlacementTop) { // Select where it is located
+				updateProgressBar (2);
+				instructionsLabel.text = "";
+				//TODO Add next step
+			} else if (WPlacementUnder) {
+				updateProgressBar (2);
+				instructionsLabel.text = "";
+				//TODO Add next step
+			} 
 		}
-		if (WPlacementUnder) {
-			updateProgressBar(2);
-			instructionsLabel.text = "Follow the animation ->";
-			//TODO Add next step
-		}
-		if (WPlacementBottom) {
-			if (instructions.matchAB) TargetArrowAB.gameObject.SetActive (true);
-			if (instructions.matchAC) TargetArrowAC.gameObject.SetActive (true);
-			if (instructions.matchCD) TargetArrowCD.gameObject.SetActive (true);
-			instructionsLabel.text = "Rotate the under layer so that the white piece is underneath its target.\nSelect which side it's on.";
-			hideWPlacementButtons ();
-            showLeftRightButtons(VerticalLocation.BOTTOM);
-		}
-		if (WSelectedLeft && !instructions.animationShowing) {
-			instructionsLabel.text = "Follow the animation ->";
-			instructions.animationShowing = true;
-			LeftBottomLayerAlgorithm.gameObject.SetActive (true);
-			hideLeftRightButtons ();
-		}
-		if (WSelectedRight && !instructions.animationShowing) {
-			instructionsLabel.text = "Follow the animation -> ";
-			RightBottomLayerAlgorithm.gameObject.SetActive (true);
-			instructions.animationShowing = true;
-			hideLeftRightButtons ();
-		}
+
 	}
 
 	private void solveYellowLayer(){
@@ -433,9 +432,23 @@ public class DistanceCalc : MonoBehaviour {
         RightUnderGazeButton.gameObject.SetActive(false);
     }
 
+	private void disableAnimations() {
+		LeftBottomLayerAlgorithm.gameObject.SetActive(false);
+		RightBottomLayerAlgorithm.gameObject.SetActive (false);
+	}
+
 	private void updateProgressBar(int setLevel){
 		progressBar.level = setLevel;
 		progressBar.upLevel ();
+	}
+
+	private void resetPlacementButtons(){
+		// Init buttons 
+		WPlacementTop = false;
+		WPlacementBottom = false;
+		WPlacementUnder = false;
+		WSelectedLeft = false;
+		WSelectedRight = false;
 	}
 		
 }
