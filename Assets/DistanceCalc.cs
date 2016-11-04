@@ -283,11 +283,11 @@ public class DistanceCalc : MonoBehaviour {
 				showLeftRightButtons (VerticalLocation.BOTTOM);
 			} else if (WPlacementTop) { // Select where it is located
 				updateProgressBar (2);
-				instructionsLabel.text = "";
+				instructionsLabel.text = "Put white piece in the bottom layer. Select the bottom layer-button when it is done.";
 				//TODO Add next step
 			} else if (WPlacementUnder) {
 				updateProgressBar (2);
-				instructionsLabel.text = "";
+				instructionsLabel.text = "Put white piece in the bottom layer. Select the bottom layer-button when it is done.";
 				//TODO Add next step
 			} 
 		}
